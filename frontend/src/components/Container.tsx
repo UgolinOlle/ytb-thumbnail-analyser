@@ -1,8 +1,11 @@
+import { cn } from '~/lib/utils';
+
 type ContainerProps = {
+  className?: string;
   children: React.ReactNode;
 };
 
-export const Container: React.FC<ContainerProps> = ({ children }) => {
+export const Container: React.FC<ContainerProps> = ({ className, children }) => {
   // --- Render
-  return <section className="max-w-3xl mx-auto px-4">{children}</section>;
+  return <section className={cn('mx-auto max-w-3xl px-4', className)}>{children}</section>;
 };
