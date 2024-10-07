@@ -1,16 +1,17 @@
-from app.core.handlers.error import ErrorHandler
 from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.orm import Session
-from app.core.configs.database import db
-from app.core.schemas.thumbnail import ThumbnailCreate, ThumbnailResponse
-from app.services.image_analyser import analyze_thumbnail
-from app.db.crud.thumbnail import create_thumbnail_record
 from io import BytesIO
 from PIL import Image
 import imghdr
 
-router = APIRouter()
+from app.core.handlers.error import ErrorHandler
+from app.core.configs.database import db
+from app.core.schemas.thumbnail import ThumbnailCreate, ThumbnailResponse
+from app.services.image_analyser import analyze_thumbnail
+from app.db.crud.thumbnail import create_thumbnail_record
 
+# --- Variables
+router = APIRouter()
 ALLOWED_IMAGE_TYPES = {"jpeg", "png"}
 
 
@@ -19,7 +20,23 @@ async def upload_thumbnail(
     file: UploadFile = File(...), db_session: Session = Depends(db.get_db)
 ):
     """
-    Upload a thumbnail image, analyze it, and get feedback (score and suggestions).
+    Uploads a YouTube thumbnail image, analyzes it using the Groq API, and returns a score and suggestions for improvement.
+
+    This endpoint processes an uploaded image file, ensures that the file is a valid image type,
+    and then sends the image for analysis. The analysis generates a score (1-10) and a comment, which
+    are saved in the database along with the image URL.
+
+    Parameters:
+    file (UploadFile): The uploaded image file to be processed.
+    db_session (Session): The database session used for saving the thumbnail analysis result.
+
+    Returns:
+    ThumbnailResponse: A JSON response containing the thumbnail's ID, image URL, score, comment,
+    and the timestamp of when the thumbnail record was created.
+
+    Raises:
+    HTTPException: Raised if the file is not a valid image type, if the image is corrupted, or if there
+    is an error during the analysis process.
     """
     image_bytes = await file.read()
 

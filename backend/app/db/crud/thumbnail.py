@@ -6,7 +6,18 @@ from datetime import datetime
 
 def create_thumbnail_record(db: Session, thumbnail: ThumbnailCreate):
     """
-    Sauvegarder les informations d'une miniature dans la base de données.
+    Save the thumbnail information into the database.
+
+    This function creates a new record in the 'thumbnails' table based on the provided
+    ThumbnailCreate schema and commits it to the database.
+
+    Parameters:
+    db (Session): The SQLAlchemy database session used to interact with the database.
+    thumbnail (ThumbnailCreate): A Pydantic schema containing the data for the thumbnail,
+    including image URL, score, and comment.
+
+    Returns:
+    Thumbnail: The saved Thumbnail object from the database with an assigned ID and timestamp.
     """
     db_thumbnail = Thumbnail(
         image_url=thumbnail.image_url,
