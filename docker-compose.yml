@@ -1,25 +1,24 @@
 services:
   frontend:
-    image: node:18-slim 
+    platform: linux/amd64
+    build:
+      context: ./frontend 
+    image: frontend:1.0
     container_name: frontend
     working_dir: /app
-    volumes:
-      - ./frontend:/app
     ports:
       - "3000:3000"
-    command: sh -c "npm install && npm run dev"
-    environment:
-      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
 
   backend:
-    image: python:3.11-slim
+    build:
+      context: ./backend
+    image: backend:1.0
     container_name: backend
     working_dir: /app
     volumes:
       - ./backend:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     depends_on:

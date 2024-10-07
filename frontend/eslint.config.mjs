@@ -1,7 +1,6 @@
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import pluginJs from '@eslint/js';
-import hooksPlugin from 'eslint-plugin-react-hooks';
 import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
 import tailwind from 'eslint-plugin-tailwindcss';
 import globals from 'globals';
@@ -17,12 +16,6 @@ export default [
   ...tailwind.configs['flat/recommended'],
   ...tseslint.configs.recommended,
   ...fixupConfigRules(pluginReactConfig),
-  {
-    plugins: {
-      'react-hooks': hooksPlugin,
-    },
-    rules: hooksPlugin.configs.recommended.rules,
-  },
   {
     rules: {
       'react/react-in-jsx-scope': 'off',
