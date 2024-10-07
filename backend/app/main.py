@@ -6,7 +6,7 @@ from app.core.configs.database import db
 # --- Create FastAPI app
 app = FastAPI()
 
-origins = ["http://localhost:5173"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
