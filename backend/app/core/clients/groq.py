@@ -1,5 +1,6 @@
 from groq import Groq
 import base64
+
 from app.core.configs.globals import settings
 
 
@@ -33,7 +34,7 @@ class GroqClient:
         image_bytes (bytes): The image data to be analyzed, in bytes format.
 
         Returns:
-        str: A comment suggesting how the thumbnail could be improved based on its visual clarity.
+        str: A comment suggesting how the thumbnail could be improved based on its visual quality and clarity.
         """
         base64_image = base64.b64encode(image_bytes).decode("utf-8")
 
@@ -45,9 +46,20 @@ class GroqClient:
                         {
                             "type": "text",
                             "text": """
-                                This is a YouTube thumbnail. Please analyze its visual quality and rate it
-                                on a scale of 1 to 10 based solely on its visual appeal and clarity. Provide
-                                suggestions to improve the thumbnail to make it more compelling. Only return the comment.
+                                This is a YouTube thumbnail. Please analyze its visual quality and rate it on a scale
+                                of 1 to 10, based on its visual appeal, clarity, and design. Provide constructive
+                                feedback on how the thumbnail can be improved to make it more eye-catching and
+                                effective.
+
+                                For positive feedback, consider using terms like:
+                                "excellent", "clear", "engaging", "vibrant", "well-designed", "eye-catching",
+                                "professional", "impactful", "compelling", "high quality".
+
+                                For negative feedback, consider using terms like:
+                                "poor", "blurry", "unclear", "boring", "unprofessional", "confusing",
+                                "messy", "low quality", "distracting", "incomplete".
+
+                                Only return the comment and NOTHING else.
                             """,
                         },
                         {

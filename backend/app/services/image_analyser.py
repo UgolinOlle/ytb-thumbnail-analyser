@@ -46,8 +46,30 @@ def calculate_dynamic_score(comment: str) -> int:
     int: A dynamic score between 1 and 10.
     """
     try:
-        positive_keywords = ["excellent", "bien", "clair", "attrayant", "parfait"]
-        negative_keywords = ["mauvais", "flou", "incomplet", "difficile", "problème"]
+        positive_keywords = [
+            "excellent",
+            "clear",
+            "engaging",
+            "vibrant",
+            "well-designed",
+            "eye-catching",
+            "professional",
+            "impactful",
+            "compelling",
+            "high quality",
+        ]
+        negative_keywords = [
+            "poor",
+            "blurry",
+            "unclear",
+            "boring",
+            "unprofessional",
+            "confusing",
+            "messy",
+            "low quality",
+            "distracting",
+            "incomplete",
+        ]
         score = 5
 
         for word in positive_keywords:
