@@ -1,7 +1,7 @@
 'use client';
 
 import { Upload, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '~/lib/utils';
 import axios from 'axios';
@@ -26,6 +26,8 @@ export const Uploader: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const containerColor = isUploading
     ? 'text-orange-500 border-orange-500'
@@ -34,6 +36,18 @@ export const Uploader: React.FC = () => {
       : 'text-primary border-primary';
 
   const iconColor = isUploading ? 'text-orange-500' : file ? 'text-green-500' : 'text-primary';
+
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    };
+
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    return () => window.removeEventListener('resize', updateWidth);
+  }, []);
 
   // --- Functions
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +68,6 @@ export const Uploader: React.FC = () => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.info(response);
 
         toast.success('Analyse réussie !');
         setAnalysisResult({
@@ -63,11 +76,8 @@ export const Uploader: React.FC = () => {
           imageUrl: URL.createObjectURL(selectedFile),
         });
       } catch (error) {
-        if (error instanceof z.ZodError) {
-          toast.error(error.errors[0]?.message || 'Erreur de validation');
-        } else {
-          toast.error("Erreur lors de l'analyse de la miniature");
-        }
+        if (error instanceof z.ZodError) toast.error(error.errors[0]?.message || 'Erreur de validation');
+        else toast.error("Erreur lors de l'analyse de la miniature");
       } finally {
         setIsUploading(false);
       }
@@ -87,7 +97,7 @@ export const Uploader: React.FC = () => {
 
   // --- Render
   return (
-    <div className="w-full">
+    <div className="w-full" ref={containerRef}>
       <AnimatePresence initial={false} mode="wait">
         {!analysisResult ? (
           <motion.div
@@ -96,13 +106,14 @@ export const Uploader: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.3 }}
-            className="relative flex h-[500px] w-full items-center justify-center overflow-hidden"
+            className="relative w-full"
+            style={{ height: containerWidth }}
             onMouseEnter={() => !isUploading && !file && setIsHovered(true)}
             onMouseLeave={() => !isUploading && !file && setIsHovered(false)}
           >
             <motion.div
               className={cn(
-                'group/uploader relative h-full w-full rounded-lg bg-white transition duration-300 ease-in-out',
+                'group/uploader absolute inset-0 flex items-center justify-center rounded-lg bg-white transition duration-300 ease-in-out',
                 containerColor
               )}
               initial={{ border: '2px', borderStyle: 'solid' }}
@@ -111,7 +122,7 @@ export const Uploader: React.FC = () => {
             >
               <div
                 className={cn(
-                  `relative h-full w-full rounded-lg transition-all duration-300 ease-in-out`,
+                  `relative flex h-full w-full items-center justify-center rounded-lg transition-all duration-300 ease-in-out`,
                   isUploading
                     ? 'animate-pulse shadow-[0_0_30px_rgba(255,165,0,0.8)]'
                     : file
@@ -119,11 +130,11 @@ export const Uploader: React.FC = () => {
                       : ''
                 )}
               >
-                <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4 p-4">
+                <div className="flex flex-col items-center justify-center space-y-4 p-4 text-center">
                   <label
                     htmlFor="file"
                     className={cn(
-                      'flex cursor-pointer flex-col items-center text-center transition-all duration-300 ease-in-out',
+                      'flex cursor-pointer flex-col items-center transition-all duration-300 ease-in-out',
                       containerColor,
                       !isUploading && !file && 'group-hover/uploader:text-primary'
                     )}
@@ -171,6 +182,7 @@ export const Uploader: React.FC = () => {
             exit={{ opacity: 0, x: -50 }}
             transition={{ duration: 0.3 }}
             className="relative w-full rounded-lg bg-white shadow-lg"
+            style={{ minHeight: containerWidth }}
           >
             <div className={cn('h-2 w-full rounded-t-lg', getScoreColor(analysisResult.score))} />
             <div className="absolute right-2 top-4">
@@ -181,12 +193,16 @@ export const Uploader: React.FC = () => {
                 <X size={20} />
               </button>
             </div>
-            <div className="flex h-[500px] flex-col p-6">
+            <div className="flex flex-col p-6">
               <h2 className="mb-4 text-2xl font-bold text-gray-800">Analysis Result</h2>
               <div className="mb-4 flex-1 overflow-hidden">
-                <img src={analysisResult.imageUrl} alt="Uploaded thumbnail" className="mb-4 h-48 w-full object-cover" />
+                <img
+                  src={analysisResult.imageUrl}
+                  alt="Uploaded thumbnail"
+                  className="mb-4 h-48 w-full rounded-xl object-cover"
+                />
                 <p className="mb-2 text-lg font-semibold text-gray-700">Comment:</p>
-                <div className="h-[180px] overflow-y-auto pr-2">
+                <div className="max-h-[280px] overflow-y-auto pr-2">
                   <p className="text-gray-600">{analysisResult.comment}</p>
                 </div>
               </div>

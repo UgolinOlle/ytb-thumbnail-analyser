@@ -8,7 +8,7 @@ import { Grid } from './components/Grid';
 export default function App() {
   // --- Render
   return (
-    <Container className="flex min-h-screen w-full flex-col items-center justify-center gap-20">
+    <Container className="flex min-h-screen w-full flex-col items-center justify-center gap-10 md:gap-20">
       <Grid />
       <Header className="text-primary" align="center">
         Youtube Thumbnails Analyser
