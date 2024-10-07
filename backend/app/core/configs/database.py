@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import SQLAlchemyError
-from app.core.handlers.database_error_handler import DatabaseErrorHandler
+from app.core.handlers.error_database import DatabaseErrorHandler
 from .globals import settings
 
 
