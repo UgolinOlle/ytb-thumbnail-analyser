@@ -1,9 +1,7 @@
-
-version: '3.8'
-
 services:
   frontend:
-    image: node:18-alpine
+    image: node:18-slim 
+    container_name: frontend
     working_dir: /app
     volumes:
       - ./frontend:/app
@@ -16,7 +14,8 @@ services:
       - backend
 
   backend:
-    image: python:3.11
+    image: python:3.11-slim
+    container_name: backend
     working_dir: /app
     volumes:
       - ./backend:/app
@@ -25,18 +24,24 @@ services:
       - "8000:8000"
     depends_on:
       - db
-    environment:
-      - DATABASE_URL=mysql+pymysql://root:example@db/youtube_analyser
+    env_file:
+      - .env
 
   db:
-    image: mysql:8
+    image: mysql:8.0.32-oracle
+    container_name: db_container
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: youtube_analyser
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+    env_file:
+      - .env
 
 volumes:
   db-data:
+
