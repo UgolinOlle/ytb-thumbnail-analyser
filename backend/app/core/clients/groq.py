@@ -46,20 +46,13 @@ class GroqClient:
                         {
                             "type": "text",
                             "text": """
-                                This is a YouTube thumbnail. Please analyze its visual quality and rate it on a scale
-                                of 1 to 10, based on its visual appeal, clarity, and design. Provide constructive
-                                feedback on how the thumbnail can be improved to make it more eye-catching and
-                                effective.
-
-                                For positive feedback, consider using terms like:
-                                "excellent", "clear", "engaging", "vibrant", "well-designed", "eye-catching",
-                                "professional", "impactful", "compelling", "high quality".
-
-                                For negative feedback, consider using terms like:
-                                "poor", "blurry", "unclear", "boring", "unprofessional", "confusing",
-                                "messy", "low quality", "distracting", "incomplete".
-
-                                Only return the comment and NOTHING else.
+                                Analyze this YouTube thumbnail for its visual quality. Provide a score between 1 and 10,
+                                considering factors like visual appeal, clarity, and overall design. Include a brief
+                                comment highlighting areas for improvement and suggestions to make it more eye-catching
+                                and effective. Add the maximum of detail possible.
+                                For positive feedback, you may use terms like: 'excellent,' 'engaging,' 'vibrant,' 'clear,' 'eye-catching,' 'professional,' 'high quality.'
+                                For constructive feedback, you may use terms like: 'blurry,' 'unclear,' 'dull,' 'confusing,' 'unprofessional,' 'low quality,' 'messy,' or 'distracting.'
+                                Return only comment, without any additional text (no markdown allow).
                             """,
                         },
                         {
