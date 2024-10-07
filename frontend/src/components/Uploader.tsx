@@ -10,8 +10,8 @@ import { toast } from 'sonner';
 import { cn } from '~/lib/utils';
 
 const fileSchema = z.object({
-  file: z.instanceof(File).refine((file) => file.type === 'image/png', {
-    message: 'The file must be a PNG image',
+  file: z.instanceof(File).refine((file) => ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type), {
+    message: 'The file must be a PNG, JPEG, or JPG image',
   }),
 });
 
@@ -272,7 +272,13 @@ export const Uploader: React.FC = () => {
                             : 'Drag and drop or click to select a PNG file'}
                     </p>
                   </label>
-                  <input type="file" id="file" className="hidden" accept=".png" onChange={handleFileChange} />
+                  <input
+                    type="file"
+                    id="file"
+                    className="hidden"
+                    accept=".png,.jpeg,.jpg"
+                    onChange={handleFileChange}
+                  />
                 </div>
               </div>
             </motion.div>
