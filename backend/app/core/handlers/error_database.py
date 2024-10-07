@@ -22,7 +22,7 @@ class DatabaseErrorHandler:
         """
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database connection failed: {str(error)}",
+            detail="Database connection failed",
         )
 
     @staticmethod
@@ -38,7 +38,7 @@ class DatabaseErrorHandler:
         """
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database disconnection failed: {str(error)}",
+            detail="Database disconnection failed",
         )
 
     @staticmethod
@@ -54,7 +54,7 @@ class DatabaseErrorHandler:
         """
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Database session error: {str(error)}",
+            detail="Database session error",
         )
 
     @staticmethod
@@ -70,5 +70,5 @@ class DatabaseErrorHandler:
         """
         raise HTTPException(
             status_code=HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error closing the database session: {str(error)}",
+            detail="Error closing the database session",
         )
