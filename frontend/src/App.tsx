@@ -1,9 +1,9 @@
 import { Container } from '~/components/Container';
 import { Header } from '~/components/Header';
 import { Uploader } from '~/components/Uploader';
+import { Grid } from '~/components/Grid';
 
 import '~/styles/App.css';
-import { Grid } from './components/Grid';
 
 export default function App() {
   // --- Render
